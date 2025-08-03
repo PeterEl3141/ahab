@@ -1,0 +1,26 @@
+.triptych{
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    padding: 40px 4%;
+    height: 95vh;
+    gap: 40px;
+    background-color: #fbfbfb;
+    color: black;
+    text-align: center;
+}
+
+.triptych-tile{
+    max-width: 30%;
+}
+
+.triptych-image{
+    width: 80%;
+    object-fit: cover;
+    aspect-ratio: 2 / 3;
+    border-radius: 4px;
+}
+
+.triptych-tile-date{
+    font-weight: 100;
+}

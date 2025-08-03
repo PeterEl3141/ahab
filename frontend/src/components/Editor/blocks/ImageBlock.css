@@ -1,0 +1,27 @@
+.image-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 250px;
+    border: 2px dashed #ccc;
+    background-color: #f9f9f9;
+    position: relative;
+  }
+  
+  .image-upload-placeholder {
+    font-size: 4rem;
+    color: #999;
+    cursor: pointer;
+  }
+  
+  .plus-icon {
+    font-weight: bold;
+    font-size: 3rem;
+  }
+  
+  .image-preview {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  

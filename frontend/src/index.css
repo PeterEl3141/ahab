@@ -1,0 +1,101 @@
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  letter-spacing: 0.1rem;
+}
+
+body {
+  font-family: 'Didact Gothic';
+  background-color: #282724;
+  margin: 0;
+  padding: 0;
+  color: #eeeeee;
+  overscroll-behavior: none;
+}
+
+
+a {
+  text-decoration: none;
+  color: #eeeeee;
+}
+
+button {
+  outline-color: #b5007c;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #b5007c;
+}
+
+li{
+  list-style: none;
+}
+
+/* Enable interaction with inputs inside draggable items */
+.block-heading,
+.block-subheading,
+.block-paragraph,
+.block-image {
+  pointer-events: auto;
+  outline: none;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 100%;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+/* Optional: block-specific font sizes */
+.block-heading {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.block-subheading {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.block-paragraph {
+  font-size: 1rem;
+  color: #444;
+}
+
+/* Style for image placeholder block */
+.block-image {
+  background-color: #f1f1f1;
+  border: 1px dashed #aaa;
+  height: 200px;
+  text-align: center;
+  color: #888;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.draggable-block {
+  user-select: none;
+  cursor: grab;
+  padding: 0.5rem;
+  border: 1px dashed #aaa;
+  margin-bottom: 0.5rem;
+  background: #f9f9f9;
+}
+
+
+.block-wrapper input:focus {
+  outline: none;
+}

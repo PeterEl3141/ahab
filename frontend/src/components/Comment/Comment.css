@@ -1,0 +1,80 @@
+.comment {
+    background-color: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  .comment-content strong {
+    display: block;
+    font-size: 1rem;
+    color: #222;
+    margin-bottom: 0.25rem;
+  }
+  
+  .comment-content p {
+    font-size: 1rem;
+    margin: 0.25rem 0;
+  }
+  
+  .comment-content span {
+    font-size: 0.8rem;
+    color: gray;
+  }
+  
+  .comment-actions {
+    margin-top: 0.5rem;
+  }
+  
+  .comment-actions button {
+    background: none;
+    border: none;
+    color: orange;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  .comment-actions button:hover {
+    text-decoration: underline;
+  }
+  
+  .reply-box {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .reply-box textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .reply-box button {
+    align-self: flex-end;
+    background-color: orange;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .reply-box button:hover {
+    background-color: darkorange;
+  }
+  
+  .comment-replies {
+    margin-top: 1rem;
+    margin-left: 1.5rem;
+    border-left: 2px solid #eee;
+    padding-left: 1rem;
+  }
+  

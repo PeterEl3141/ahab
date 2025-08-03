@@ -1,0 +1,29 @@
+.shakes-tile-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .shakes-tile{
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    height: 90vh;
+    background-color: #fbfbfb;
+    padding: 20px 8%;
+    color: black;
+}
+
+
+.shakes-right{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.shakes-image{
+    height: 90%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 4px;
+}

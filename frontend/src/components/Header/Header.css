@@ -1,0 +1,22 @@
+.header{
+    max-width: 100%;
+    padding: 50px 8%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: center;
+    height: 35vh;
+    background-color: white;
+    gap: 5px;
+
+}
+
+.header-title{
+    font-weight: 500;
+    font-size: 40px;
+    color: #CD3600;
+}
+
+.header-content{
+    color: black;
+}
