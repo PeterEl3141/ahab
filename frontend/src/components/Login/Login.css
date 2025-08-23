@@ -50,7 +50,7 @@
     color: #ccc;
   }
   
-  .login-box button {
+  .submit-button {
     width: 100%;
     padding: 0.7rem;
     background-color: #f35b1f;
@@ -89,6 +89,7 @@
     color: white;
     font-size: 1.2rem;
     cursor: pointer;
-    width: 20px;
+    width: 10%;
+    height: auto;
   }
   

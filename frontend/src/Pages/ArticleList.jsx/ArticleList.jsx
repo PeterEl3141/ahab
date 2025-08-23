@@ -1,54 +1,65 @@
-// ArticleList.jsx
-import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import dummyArticles from '../../DummyData';
-import './ArticleList.css';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { fetchArticles } from '../../api/articles';
+import { renderPreviewBlock } from '../../helpers/renderPreviewBlock.jsx';
+import './ArticleList.css'
 
 const ArticleList = () => {
   const { category } = useParams();
-  const [selectedId, setSelectedId] = useState(null);
+  const [articles, setArticles] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const navigate = useNavigate();
 
-  const filteredArticles = dummyArticles.filter(
-    article => article.category?.toLowerCase() === category.toLowerCase()
-  );
-
-  const selectedArticle =
-    filteredArticles.find(article => article.id === selectedId) || filteredArticles[0];
-
-  if (!filteredArticles.length) {
-    return <p>No articles found in this category.</p>;
-  }
+  useEffect(() => {
+    const loadArticles = async () => {
+      try {
+        const { data } = await fetchArticles(category, true);
+        setArticles(data);
+        if (data.length > 0) setSelected(data[0]);
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+      }
+    };
+    loadArticles();
+  }, [category]);
 
   return (
-    <div className="article-list-page">
-      <div className="article-list-left">
-        {filteredArticles.map(article => (
+    <div  className='article-list-page'>
+      {/* Left list */}
+      <div className='article-list-left' >
+        <h2>{category} Articles</h2>
+        {articles.map(a => (
           <div
-            key={article.id}
-            className={`article-title ${selectedId === article.id ? 'active' : ''}`}
-            onClick={() => setSelectedId(article.id)}
+            key={a.id}
+            style={{
+              padding: '0.5rem',
+              background: selected?.id === a.id ? '#eee' : 'transparent',
+              cursor: 'pointer'
+            }}
+            onClick={() => setSelected(a)}
           >
-            {article.title}
+            <h4 className='article-title'>{a.title}</h4>
+            <p className='article-meta'>{a.author?.email}</p>
           </div>
         ))}
       </div>
 
-      <div className="article-preview-right">
-        {selectedArticle && (
-          <div className="article-preview">
-            {selectedArticle.blocks.slice(0, 3).map((block, i) => {
-              switch (block.type) {
-                case 'heading': return <h2 key={i}>{block.content}</h2>;
-                case 'subheading': return <h3 key={i}>{block.content}</h3>;
-                case 'paragraph': return <p key={i}>{block.content}</p>;
-                case 'image': return <img key={i} src={block.content} alt="preview" />;
-                default: return null;
-              }
-            })}
-            <Link to={`/article/${selectedArticle.id}`} className="read-more-link">
-              Read full article →
-            </Link>
-          </div>
+      {/* Right preview */}
+      <div className='article-preview-right'>
+        {selected ? (
+          <>
+            <h2>{selected.title}</h2>
+            <p>By {selected.author?.email}</p>
+            <button className='article-list-button' onClick={() => navigate(`/article/${selected.id}`)}>Read full</button>
+            <div style={{ marginTop: '1rem' }}>
+            {(selected.blocks ?? []).slice(0, 3).map((b, i) => renderPreviewBlock(b, i))}
+            {Array.isArray(selected.blocks) && selected.blocks.length > 3 && (
+              <div style={{ marginTop: '.5rem', opacity: 0.6 }}>…</div>
+            )}
+            </div>
+          </>
+        ) : (
+          <p>No articles found in this category.</p>
         )}
       </div>
     </div>

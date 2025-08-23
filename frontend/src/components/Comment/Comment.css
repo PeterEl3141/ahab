@@ -78,3 +78,8 @@
     padding-left: 1rem;
   }
   
+
+  .comment-text {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }

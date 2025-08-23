@@ -1,0 +1,53 @@
+.quote-editor {
+    display: grid;
+    gap: 8px;
+  }
+  
+  .quote-text {
+    width: 100%;
+    min-height: 72px;
+    line-height: 1.6;
+    padding: 12px 14px;
+    border: 1px dashed rgba(255,255,255,0.25);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    color: black;
+    resize: none;
+    overflow: hidden;
+    outline: none;
+    font-style: italic;
+
+  }
+  
+  .quote-text:focus,
+  .quote-cite:focus {
+    border-color: #e64515;
+    box-shadow: 0 0 0 2px rgba(230,69,21,.22);
+  }
+  
+  .quote-cite {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px dashed rgba(255,255,255,0.25);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    color: black;
+    text-align: right; /* aligns like a signature */
+  }
+  
+  .quote-preview {
+    max-width: 70ch;
+    margin: 12px auto;
+    text-align: left;
+  }
+  
+  .quote-preview blockquote {
+    margin: 0 0 6px;
+    font-style: italic;
+  }
+  
+  .quote-preview figcaption {
+    text-align: right;
+    opacity: 0.8;
+  }
+  

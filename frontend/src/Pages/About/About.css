@@ -1,0 +1,43 @@
+.about-tractatus {
+    padding: 28px 8%;
+    text-align: center;
+    line-height: 1.65;
+    padding-top: 80px;
+  }
+  
+  .about-title {
+    margin: 0 0 18px 0;
+    letter-spacing: 0.02em;
+  }
+  
+  .tractatus-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Major section heading (e.g., 1., 2., 3.) */
+  .section-head {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 28px;   /* <-- creates the gap before each new section */
+    font-weight: 600;
+  }
+  
+  /* Only the index is italic */
+  .section-head .idx {
+    font-style: italic;
+  }
+  
+  /* Sub-points (e.g., 2.21) */
+  .point {
+    margin: 6px 0;
+    opacity: 0.95;
+  }
+  
+  /* Small responsive tweak */
+  @media (min-width: 900px) {
+    .about-tractatus { padding-left: 14%; padding-right: 14%; }
+  }
+  

@@ -2,7 +2,8 @@ import React from 'react'
 import './Hero.css'
 import Heroarticle from '../Heroarticle/Heroarticle'
 
-const Hero = () => {
+const Hero = ({article}) => {
+  if (!article) return null;
   return (
     <div className='hero'>
         <div className="hero-left">
@@ -10,7 +11,7 @@ const Hero = () => {
             <p>//Raptures, ramblings & groovey reviews</p>
         </div>
       
-       <Heroarticle/>
+       <Heroarticle article={article}/>
     </div>
   )
 }

@@ -86,6 +86,14 @@
     border: 1px solid #ddd;
     border-radius: 8px;
   }
+
+  .block-heading:focus,
+  .block-paragraph:focus,
+  .block-subheading:focus{
+    border: 3px solid;
+    border-color: #e64515;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.08) inset;
+  }
   
   .block-heading {
     font-size: 1.6rem;
@@ -149,3 +157,32 @@
     height: auto;
   }
   
+
+.dashboard-topbar { 
+  display:flex; 
+  gap:12px; 
+  margin-bottom:12px;
+  margin-right: 42px;
+  margin-left: 30%;
+  }
+
+  .title-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #000;                /* black at rest */
+    border-radius: 8px;
+    background: white;
+    color: black;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+.category-select { 
+  padding:8px 12px; 
+}
+
+.dashboard-topbar .title-input:focus,
+.dashboard-topbar .title-input:focus-visible {
+  border: 2px solid #e64515;   /* sets width + style + color */
+  box-shadow: 0 0 0 2px rgba(230,69,21,.25);
+}

@@ -7,3 +7,40 @@
     padding-top: 80px;
 
 }
+
+.admin-toolbar {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 12px;
+    justify-content: center; /* matches your centered layout */
+  }
+  
+  .admin-toolbar button {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #111;
+    color: #fff;
+  }
+  .admin-toolbar button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .admin-toolbar button:hover:not(:disabled) { background: #151515; }
+  
+
+.comments-wrap {
+  position: relative;
+  z-index: 3;
+}
+
+.comments-wrap, .comments-wrap * { pointer-events: auto; }
+
+
+
+
+.article-quote { max-width: 70ch; margin: 1.25rem auto; }
+.article-quote blockquote { margin: 0; font-style: italic; }
+.article-quote figcaption { margin-top: .5rem; text-align: right; opacity: .85; }
+
+.article h1.article-title {
+  font-size: clamp(28px, 6vw, 56px);
+  line-height: 1.1;
+}

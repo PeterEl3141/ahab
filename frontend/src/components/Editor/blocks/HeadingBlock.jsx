@@ -7,7 +7,7 @@ const HeadingBlock = ({ content, onUpdate }) => {
         value={content}
         onChange={(e) => onUpdate(e.target.value)}
         className="block-heading"
-        placeholder="Enter your title here"
+        placeholder="Enter your title heres"
       />
     );
   };

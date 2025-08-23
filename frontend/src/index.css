@@ -24,7 +24,7 @@ a {
 }
 
 button {
-  outline-color: #b5007c;
+  outline-color: #CD3600;
   color: white;
   border: none;
   padding: 10px 16px;
@@ -34,7 +34,7 @@ button {
 }
 
 button:hover {
-  background-color: #b5007c;
+  background-color: #CD3600;
 }
 
 li{

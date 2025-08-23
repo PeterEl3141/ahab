@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useEffect, useRef} from 'react';
 
 const ParagraphBlock = ({ content, onUpdate }) => {
-  return (
-    <input
-      type="text"
-      defaultValue={content}
-      className="block-paragrpah"
-      onChange={(e) => onUpdate(e.target.value)}
+  const ref = useRef(null);
 
+  const autosize = () => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
+  };
+
+  useEffect(() => {
+    autosize();
+  }, [content]);
+
+  return (
+    <textarea
+      ref={ref}
+      className="block-paragraph"
+      value={content}
+      onChange={(e) => onUpdate(e.target.value)}
+      onInput={autosize}
+      rows={1}
+      placeholder="Write your paragraph…"
+      spellCheck
     />
   );
 };

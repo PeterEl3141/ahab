@@ -4,13 +4,17 @@ import { Droppable, Draggable } from '@hello-pangea/dnd';
 
 const RightPanel = ({ blocks, setBlocks, handleDelete, isPreview }) => {
 
-  const updateBlockContent = (id, newContent) => {
-    setBlocks(prev =>
-      prev.map(block =>
-        block.id === id ? { ...block, content: newContent } : block
-      )
-    );
-  };
+  const updateBlockContent = (id, update) => {
+       setBlocks(prev =>
+         prev.map(block => {
+           if (block.id !== id) return block;
+           // allow string (content only) OR object patch ({ content, cite, ... })
+           return typeof update === 'object'
+             ? { ...block, ...update }
+             : { ...block, content: update };
+         })
+       );
+     };
 
   const handleImageChange = (id, fileUrl) => {
     setBlocks(prev =>

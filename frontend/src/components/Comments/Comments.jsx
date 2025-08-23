@@ -1,88 +1,141 @@
-import React, { useEffect, useState } from 'react';
-import Comment from '../Comment/Comment.jsx';
-import './Comments.css';
+import React, { useEffect, useMemo, useState } from "react";
+import Comment from "../Comment/Comment.jsx";
+import "./Comments.css";
+import {
+  getArticleComments,
+  postComment,
+  reactToComment,
+  deleteComment
+} from "../../api/comments";
 
-const Comments = ({ articleId }) => {
+// Pass `currentUser` if you have auth; otherwise you can omit it.
+const Comments = ({ articleId, currentUser }) => {
   const [comments, setComments] = useState([]);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem(`comments-${articleId}`);
-    if (stored) {
-      setComments(JSON.parse(stored));
+
+
+  // Load from backend
+  const load = async () => {
+    try {
+      const { data } = await getArticleComments(articleId);
+      setComments(data || []);
+    } catch (e) {
+      console.error("Failed to load comments", e);
     }
+  };
+
+  useEffect(() => {
+    if (articleId) load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [articleId]);
 
-  // Save to localStorage when comments change
-  useEffect(() => {
-    localStorage.setItem(`comments-${articleId}`, JSON.stringify(comments));
-  }, [comments, articleId]);
+  // Group by parent for fast tree building
+  const byParent = useMemo(() => {
+    const map = new Map();
+    for (const c of comments) {
+      const key = c.parentId ?? null;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(c);
+    }
+    return map;
+  }, [comments]);
 
-  const handleSubmit = () => {
-    if (!text.trim()) return;
+  const getReplies = (parentId) => byParent.get(parentId) || [];
+  const topLevel = byParent.get(null) || [];
 
-    const newComment = {
-      id: Date.now(),
-      content: text.trim(),
-      author: 'John Doe', // Temporary static user
-      timestamp: new Date().toISOString(),
-      parentId: null,
-    };
-
-    setComments(prev => [...prev, newComment]);
-    setText('');
+  const handleSubmit = async () => {
+    const content = text.trim();
+    if (!content || busy) return;
+    try {
+      setBusy(true);
+      await postComment({ content, articleId, parentId: null });
+      setText("");
+      await load(); // refetch to include server fields & counts
+    } catch (e) {
+      console.error("Failed to post comment", e);
+    } finally {
+      setBusy(false);
+    }
   };
 
-
-  const handleLike = (id) => {
-    setComments(prev => prev.map(c => c.id === id ? {...c, likes: (c.likes || 0) + 1} : c))
-  }
-
-  const handleDislike = (id) => {
-    setComments(prev => prev.map(c => c.id === id ? {...c, dislikes: (c.dislikes || 0) + 1 } : c))
-  }
-
-
-  // Recursive function to structure nested comments
-  const getReplies = (parentId) => {
-    return comments.filter(c => c.parentId === parentId);
+  const addReply = async (parentId, replyText) => {
+    const content = replyText.trim();
+    if (!content || busy) return;
+    try {
+      setBusy(true);
+      await postComment({ content, articleId, parentId });
+      await load();
+    } catch (e) {
+      console.error("Failed to post reply", e);
+    } finally {
+      setBusy(false);
+    }
   };
 
-  const addReply = (parentId, replyText) => {
-    const reply = {
-      id: Date.now(),
-      content: replyText,
-      author: 'John Doe',
-      timestamp: new Date().toISOString(),
-      parentId,
-    };
-    setComments(prev => [...prev, reply]);
+  const handleLike = async (id) => {
+    try {
+      await reactToComment({ commentId: id, type: "LIKE" });
+      await load();
+    } catch (e) {
+      console.error("Failed to react (like)", e);
+    }
   };
 
-  const topLevelComments = comments.filter(c => c.parentId === null);
+  const handleDislike = async (id) => {
+    try {
+      await reactToComment({ commentId: id, type: "DISLIKE" });
+      await load();
+    } catch (e) {
+      console.error("Failed to react (dislike)", e);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this comment? This cannot be undone.")) return;
+    try {
+      setBusy(true);
+      await deleteComment(id);
+      await load();
+    } catch (e) {
+      console.error("Failed to delete comment", e);
+      alert("Failed to delete comment.");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <div className="comments-section">
       <h2>Comments</h2>
+
       <div className="comment-form">
         <textarea
-          placeholder="Write a comment..."
+          placeholder={currentUser ? "Write a comment…" : "Log in to comment"}
           value={text}
           onChange={(e) => setText(e.target.value)}
+          disabled={busy}
         />
-        <button onClick={handleSubmit}>Comment</button>
+        <button
+          onClick={handleSubmit}
+          disabled={!currentUser || busy || !text.trim()}
+        >
+          {busy ? "Posting…" : "Comment"}
+        </button>
       </div>
 
-      {topLevelComments.map(comment => (
+      {topLevel.map((comment) => (
         <Comment
           key={comment.id}
           comment={comment}
           replies={getReplies(comment.id)}
-          addReply={addReply}
           getReplies={getReplies}
+          addReply={addReply}
           onLike={handleLike}
           onDislike={handleDislike}
+          currentUser={currentUser}
+          onDelete={handleDelete}
         />
       ))}
     </div>

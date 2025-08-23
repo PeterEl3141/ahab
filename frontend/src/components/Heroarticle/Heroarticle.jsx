@@ -1,19 +1,28 @@
 import React from 'react'
 import './Heroarticle.css'
-import dummyArticles from '../../DummyData'
+import { Link } from 'react-router-dom'
+import { getHeroImage, getDate } from '../../helpers/articleHelpers'
 
+const Heroarticle = ({article}) => {
 
+  if(!article) return null; 
 
-const Heroarticle = () => {
+  const img = getHeroImage(article);
+  const date = getDate(article);
+
   return (
     <div className='card'>
-      {dummyArticles.slice(0, 1).map((article, index) => (
-        <div key={article.id}>
-          <img src={article.image} alt={`${article.title} screenshot`} className='hero-article-image' />
+      <Link to={`/article/${article.id}`} className='hero-article-link'>
+          <img src={img} 
+          alt={`${article.title} screenshot`} 
+          className='hero-article-image' 
+          loading='eager'
+          fetchPriority='high'
+          />
           <h3>{article.title}</h3>
-          <p>READ THE LATEST REVIEW</p>
-        </div>
-      ))}
+          <h4>{date ? new Date(date).toLocaleDateString() : '—'}</h4>
+          <p className='hero-article-kicker'>READ THE LATEST REVIEW</p>
+      </Link>
     </div>
   )
 }

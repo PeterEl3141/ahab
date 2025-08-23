@@ -4,7 +4,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
-import ContextProvider, { AuthContext } from './Context/AuthContext.jsx';
+import { AuthProvider } from './Context/AuthContext.jsx';
 import App from './App.jsx';
 import Home from './Pages/Home/Home.jsx';
 import About from './Pages/About/About.jsx';
@@ -17,6 +17,9 @@ import Unpublished from './Pages/Unpublished/Unpublished.jsx';
 import Article from './Pages/Article /Article.jsx';
 import ArticleList from './Pages/ArticleList.jsx/ArticleList.jsx';
 import './index.css';
+import RequrieAdmin from './components/guards/RequireAdmin.jsx';
+import ForgotPassword from './Pages/ForgotPassword/ForgotPassword.jsx';
+import ResetPassword from './Pages/ResetPassword/ResetPassword.jsx';
 
 const router = createBrowserRouter([
   {
@@ -29,10 +32,12 @@ const router = createBrowserRouter([
       { path: 'music', element: <Music /> },
       { path: 'blog', element: <Blog /> },
       { path: 'about', element: <About /> },
-      { path: 'dashboard', element: <Dashboard /> },
+      { path: 'dashboard', element: <RequrieAdmin><Dashboard /></RequrieAdmin> },
       { path:"unpublished", element:<Unpublished />},
       { path:"article/:id", element:<Article />},
       { path:"articleList/:category", element:<ArticleList />},
+      { path:"forgot-password", element:<ForgotPassword />},
+      { path:"reset-password", element:<ResetPassword />},
 
     ],
   },
@@ -40,8 +45,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ContextProvider>
+    <AuthProvider>
       <RouterProvider router={router} />
-    </ContextProvider>
+    </AuthProvider>
   </React.StrictMode>
 );

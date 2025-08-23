@@ -1,82 +1,170 @@
+:root { 
+  --nav-trigger-h: 40px;     /* make triggers & avatar the same height */
+  --dropdown-gap: 6px;       /* visual spacing below trigger */
+  --dropdown-bridge: 20px;   /* invisible hover area; bump as needed */
+}
+
+/* ===== NAV BAR ===== */
 .navbar {
-    padding: 2rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    height: 50px;
-    width: 100vw;
-    top: 0;
-    background: linear-gradient(90deg, #000 0%, rgba(0,0,0,0) 100%);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
+  /* Keep the nice blur/gradient, but avoid height vs padding fights */
+  padding: 0 2rem;
+  min-height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  inset: 0 0 auto 0;      /* top:0; left:0; right:0 */
+  width: 100vw;
+  background: linear-gradient(90deg, #000 0%, rgba(0,0,0,0) 100%);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
 }
 
-.navbar-right{
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
+/* Right side (links + profile) */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.navbar-right ul{
-    display: flex;
-    justify-content: space-between;
-    gap: 1.5rem;
+.navbar-right ul {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
-
+/* Links */
 .navbar-links li a {
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  .navbar-profile p,
-  button {
-    cursor: pointer;
-    background: none;
-    border: none;
-    font: inherit;
-    
-  }
-  
-  button:hover,
-  .navbar-profile p:hover {
-    text-decoration: underline;
-  }
+  text-decoration: none;
+  font-weight: 500;
+}
 
-  .dropdown {
-    position: relative;
-  }
-  
-  /* Hide submenu initially */
-  .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: rgb(0, 0, 0);
-    padding: 0.5rem 1rem;
-    display: none !important;
-    flex-direction: column;
-    z-index: 100;
-  }
-  
-  /* Show submenu on hover */
-  .dropdown:hover .dropdown-menu {
-    display: flex !important; /* <-- this was the fix */
-  }
-  
-  /* Style dropdown links */
-  .dropdown-menu li {
-    padding: 0.25rem 0;
-  }
-  
-  .dropdown-menu li a {
-    color: white;
-    text-decoration: none;
-    font-weight: normal;
-  }
-  
-  .dropdown-menu li a:hover {
-    text-decoration: underline;
-  }
-  
+.navbar-links > li {
+  display: inline-flex;
+  align-items: center;
+  height: var(--nav-trigger-h);  /* 40px — matches avatar */
+}
+
+/* Buttons and profile text */
+.navbar-profile p,
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font: inherit;
+}
+button:hover,
+.navbar-profile p:hover {
+  text-decoration: underline;
+}
+
+/* ===== DROPDOWNS ===== */
+
+/* Make each dropdown a tight, predictable anchor */
+.dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.dropdown > span,
+.dropdown > button,
+.navbar-profile {
+  display: inline-flex;
+  align-items: center;
+  height: var(--nav-trigger-h);
+}
+
+/* Hide submenu initially */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + var(--dropdown-gap));  /* consistent anchor */
+  left: 0;
+  background-color: #000;
+  padding: 0.5rem 1rem;
+  display: none !important;
+  flex-direction: column;
+  z-index: 1100;  /* slightly above navbar */
+}
+
+/* Show submenu on hover */
+.dropdown:hover .dropdown-menu {
+  display: flex !important;
+}
+
+/* Menu items */
+.dropdown-menu li {
+  padding: 0.25rem 0;
+}
+.dropdown-menu li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: normal;
+}
+.dropdown-menu li a:hover {
+  text-decoration: underline;
+}
+
+/* ===== PROFILE / AVATAR ===== */
+
+/* Make the profile trigger match avatar height so top:100% aligns perfectly */
+/* Profile trigger (keep same height as avatar/trigger) */
+.navbar-profile {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  /* height now inherited from rule above (var(--nav-trigger-h)) */
+}
+
+.navbar-avatar,
+.navbar-avatar-fallback {
+  width: var(--nav-trigger-h);
+  height: var(--nav-trigger-h);
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin-right: 6px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Align the profile menu to the right edge of the avatar */
+.navbar-profile.dropdown .dropdown-menu {
+  right: 0;
+  left: auto;
+}
+
+
+
+/* ===== BRAND ===== */
+.brand-logo {
+  height: 32px;     /* sweet spot for most navbars */
+  width: auto;      /* keep aspect ratio */
+  object-fit: contain;
+  display: block;
+  transition: opacity 120ms ease;
+}
+
+/* Optional: nicer dropdown item buttons */
+.dropdown-item button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 10px;
+  font: inherit;
+}
+.dropdown-item.muted { opacity: 0.7; font-size: 0.95em; }
+
+
+.dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: calc(-1 * var(--dropdown-bridge));
+  left: 0;
+  right: 0;
+  height: var(--dropdown-bridge);
+  /* transparent */
+}

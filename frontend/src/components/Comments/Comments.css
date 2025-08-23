@@ -28,6 +28,7 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     resize: vertical;
+    pointer-events: auto;
   }
   
   .comment-form button {
