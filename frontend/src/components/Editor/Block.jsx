@@ -17,7 +17,7 @@ const Block = ({ block, isPreview = false, onUpdate, onImageChange }) => {
         case 'paragraph':
           return <p>{block.content}</p>;
         case 'quote':
-          return <p>{block.content}</p>  ;
+          return <p>{block.content}</p>;
         case 'image':
           return block.content ? <img src={block.content} alt="preview" /> : null;
         default:

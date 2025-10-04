@@ -5,19 +5,56 @@
 }
 
 /* ===== NAV BAR ===== */
+/* BASE (hidden by default, fades/slides in when .is-visible is added) */
 .navbar {
-  /* Keep the nice blur/gradient, but avoid height vs padding fights */
-  padding: 0 2rem;
-  min-height: 64px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  /* layout */
   position: fixed;
-  inset: 0 0 auto 0;      /* top:0; left:0; right:0 */
-  width: 100vw;
+  top: 0; left: 0; right: 0;        /* more explicit than inset shorthands */
+  min-height: 64px;                 /* keep your flexible height */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+
+  /* spacing */
+  padding: 0 2rem;
+  /* optional: keep the notch happy on iOS */
+  padding-top: max(env(safe-area-inset-top, 0px), 0px);
+
+  /* visuals – keep your gradient + stronger blur */
   background: linear-gradient(90deg, #000 0%, rgba(0,0,0,0) 100%);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Safari */
+
+  /* layering */
   z-index: 1000;
+
+  /* reveal behavior */
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;             /* avoid blocking clicks while hidden */
+  transition: opacity .35s ease, transform .35s ease;
+}
+
+/* VISIBLE STATE */
+.navbar.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* (Optional) force hidden state if you ever want to toggle explicitly */
+.navbar.is-hidden {
+  opacity: 0 !important;
+  transform: translateY(-10px) !important;
+  pointer-events: none !important;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .navbar {
+    transition: none;
+  }
 }
 
 /* Right side (links + profile) */

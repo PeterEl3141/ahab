@@ -4,13 +4,14 @@ import './Navbar.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
 import { uploadProfilePicture, fetchMe } from '../../api/users';
-
-
+import useRevealOnScroll from "../../helpers/useRevealOnScroll";
+import useRevealAfterSentinel from "../../helpers/useRevealAfterSentinel";
 
 
 
 const Navbar = ({ setShowLogin }) => {
   const navigate = useNavigate();
+  const show = useRevealAfterSentinel("hero-sentinel", "0px");
 
   // Auth
   const { token, user, logout, setUser } = useContext(AuthContext); // ensure setUser exists in context
@@ -54,7 +55,7 @@ const Navbar = ({ setShowLogin }) => {
   const initials = user?.email ? user.email[0].toUpperCase() : '?';
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${show ? "is-visible" : ""}`}>
       <div className="navbar-left">
         <Link to="/" className="brand" aria-label="Ahab’s Dream — Home">
           <img

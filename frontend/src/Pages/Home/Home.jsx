@@ -6,7 +6,7 @@ import Mission from '../../components/Mission/Mission'
 import Featured from '../../components/Featured/Featured'
 import { fetchArticles } from '../../api/articles'
 import { sortByNewest } from '../../helpers/articleHelpers'
-
+import SuperHero from '../../components/SuperHero/SuperHero'
 
 const Home = () => {
 
@@ -40,11 +40,12 @@ const Home = () => {
 
   return (
     <>
-      <Hero article={hero}/>
+      <SuperHero/>
       <Triptych articles={triptych}/>
       <Featured article={featured1}/>
       <Featured article={featured2} reverse/>
       <Mission/>
+
     </>
   )
 }

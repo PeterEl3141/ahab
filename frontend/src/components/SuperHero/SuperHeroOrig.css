@@ -1,0 +1,291 @@
+:root{ --boat-ar: 2.7; } /* width / height; adjust to your boat art */
+
+
+.super-hero {
+    position: relative;
+    height: 100svh;          /* was 100svh */
+    overflow: hidden;
+    background: #000;        /* base black so bg fades in nicely */
+  }
+  
+  /* Base positioning for the title */
+.hero-title{
+  position: absolute;
+  top: var(--title-top);
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);   /* centered */
+  width: var(--title-w);
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,.35));
+  pointer-events: none;
+  user-select: none;
+  z-index: 50;
+}
+
+
+/* Force the title visible & centered, no animations */
+.super-hero .hero-title{
+  position: absolute;
+  top: var(--title-top);
+  left: 50%;
+  transform: translate3d(-50%, 0, 0) !important;
+  width: var(--title-w);
+  display: block;
+  opacity: 1 !important;
+  visibility: visible !important;
+  clip-path: none !important;
+  animation: none !important;
+  transition: none !important;
+  will-change: auto !important;
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,.35));
+  pointer-events: none;
+  user-select: none;
+  z-index: 50;
+}
+
+
+
+
+  /* Band containers (set defaults; can be overridden per-band or via JSX) */
+.band{
+    position:absolute; left:0; right:0; pointer-events:none;
+    --drift-amp: 12px;        /* how far to sway horizontally */
+    --drift-dur: 6s;          /* how fast to sway horizontally */
+    --bob-amp: 7px;           /* how far to bob vertically */
+    --bob-dur: 6s;            /* how fast to bob vertically */
+    animation: bobYVar var(--bob-dur) ease-in-out infinite;
+    transform: translateY(var(--dy));
+  }
+  
+  .band-bg{
+    bottom:var(--bg-bottom); z-index:5;
+    /* map from root-level overrides if provided */
+    --drift-amp: var(--bg-drift-amp, 8px);
+    --drift-dur: var(--bg-drift-dur, 10s);
+    --bob-amp:   var(--bg-bob-amp,   4px);
+    --bob-dur:   var(--bg-bob-dur,   7.5s);
+  }
+  .band-mid{
+    bottom:var(--mid-bottom); z-index:10;
+    --drift-amp: var(--mid-drift-amp, 12px);
+    --drift-dur: var(--mid-drift-dur, 7s);
+    --bob-amp:   var(--mid-bob-amp,   6px);
+    --bob-dur:   var(--mid-bob-dur,   6s);
+  }
+  .band-fg{
+    bottom:var(--fg-bottom); z-index:15;
+    --drift-amp: var(--fg-drift-amp, 18px);
+    --drift-dur: var(--fg-drift-dur, 5.2s);
+    --bob-amp:   var(--fg-bob-amp,   7px);
+    --bob-dur:   var(--fg-bob-dur,   5s);
+  }
+  
+  /* The oversized image inside each band */
+  .band-img{
+    position:absolute; left:50%; top:50%;
+    transform: translate(-50%,-50%) translateX(var(--dx));
+    width:120vw; max-width:none; height:auto; object-fit:cover;
+    will-change: transform;
+    animation: driftXVar var(--drift-dur) ease-in-out infinite;
+  }
+  
+  /* Boat: wrapper now uses the variable-driven bounce */
+  .ship-bob{
+    position: relative;        /* no absolute positioning here */
+    right: auto;
+    bottom: auto;
+    width: 100%;               /* fill the wrapper’s width */
+    z-index: auto;             /* z handled by .ship-wrap */
+    pointer-events: none;
+    user-select: none;
+    animation: shipBobVar var(--ship-bob-dur, 1.15s) ease-in-out infinite;
+    transform: translateY(var(--ship-dy));
+  }
+  /* Inner image teeters + tiny jitter (so transforms don’t conflict) */
+  .ship-img{
+    width:100%;
+    height: 100%;
+    transform-origin:50% 85%;
+    object-fit: contain;
+    display: block;
+    animation: teeter 4.2s ease-in-out infinite, jitter 1s steps(6) infinite;
+  }
+  @keyframes teeter{
+    0%{ transform: rotate(-3deg) }
+    50%{ transform: rotate(3deg) }
+    100%{ transform: rotate(-3deg) }
+  }
+  @keyframes jitter{
+    0%{ translate:0 0 rotate(0) }
+    33%{ translate:.4px -.3px rotate(.15deg) }
+    66%{ translate:-.3px .2px rotate(-.1deg) }
+    100%{ translate:0 0 rotate(0) }
+  }
+  
+  /* Motion accessibility */
+  @media (prefers-reduced-motion: reduce){
+    .band-img,.ship-bob,.ship-img{ animation:none !important; }
+  }
+
+
+
+  
+@property --dx { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --dy { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --ship-dy { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --sun-x { syntax: "<length>"; inherits: true; initial-value: 0px; }
+@property --sun-y { syntax: "<length>"; inherits: true; initial-value: 0px; }
+@property --ship-x     { syntax:"<length>"; inherits: true; initial-value: 0px; }
+@property --ship-y     { syntax:"<length>"; inherits: true; initial-value: 0px; }
+@property --ship-scale { syntax:"<number>"; inherits: true; initial-value: 1; }
+@property --ship-rot   { syntax:"<angle>";  inherits: true; initial-value: 0deg; }
+@property --sun-rise-target { syntax:"<length>"; inherits: true; initial-value: -6vh; }
+
+
+
+/* Generic keyframes that read per-band variables */
+@keyframes driftXVar {        /* horizontal sway for the image */
+  0%,100% { --dx: 0px; }
+  50%     { --dx: var(--drift-amp); }
+}
+@keyframes bobYVar {          /* vertical bob for the band container */
+  0%,100% { --dy: 0px; }
+  50%     { --dy: calc(var(--bob-amp) * -1); }
+}
+@keyframes shipBobVar {       /* boat’s quick bounce */
+  0%,100% { --ship-dy: 0px; }
+  50%     { --ship-dy: calc(var(--ship-bob-amp, 6px) * -1); }
+}
+
+
+/* Sun wrapper: positions the sun in the middle, behind other layers */
+.sun{
+  position:absolute; left:50%; top:50%;
+  transform: translate3d(
+    calc(-50% + var(--sun-x)),
+    calc(-50% + var(--sun-y)),
+    0
+  );
+  width: var(--sun-size, 32vw);
+  z-index: 1;
+  pointer-events: none;
+}
+  .sun-img{
+    display:block; width:100%; height:auto; object-fit: contain;
+    animation: sun-spin var(--sun-rot-dur, 60s) linear infinite;
+    will-change: transform;
+    filter: brightness(var(--sun-brightness, 1))
+            drop-shadow(0 0 12px rgba(255,255,200,.25));
+  }
+  @keyframes sun-spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
+  .bg-cover {
+    position: absolute; inset: 0;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+    z-index: 0;
+    pointer-events: none;
+    opacity: var(--bg-opacity, 1);
+  }
+
+  .bg-stars {
+    position: absolute; inset: 0;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+    z-index: 0;                 /* very back */
+    pointer-events: none;
+    opacity: var(--stars-opacity, 1);
+    transition: opacity .6s ease;
+  }
+
+  .hero-sentinel{
+    position: absolute;
+    left: 0; right: 0;
+    bottom: var(--nav-reveal-offset, 0); /* positive value moves it up */
+    height: 1px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Tail sits above bg/stars, below ship/title unless you change z-index */
+    .tail{
+      position:absolute;
+      left: clamp(4vw, 6vw, 10vw);
+      bottom: 18vh;                     /* align to your waterline */
+      width: min(40vw, 600px);
+      z-index: 16;
+      opacity: 0;                       /* hidden until the segment */
+      transition: opacity .18s linear;
+      pointer-events: none; user-select: none;
+    }
+    .tail.is-on { opacity: 1; }
+    .tail-img{ width:100%; height:auto; display:block; }
+
+
+/* Splash overlay – sits above tail (and optionally above near wave) */
+.splash{
+  
+  position:absolute;
+  left: clamp(3.5vw, 8vw, 9vw);  /* nudge to align with impact */
+  bottom: 18vh;
+  width: min(70vw, 800px);
+  z-index: 18;               /* > tail(12), > fg wave(15) if you want droplets in front */
+  opacity: 0;                /* hidden until played */
+  transform-origin: 50% 90%;
+  pointer-events: none;
+}
+.splash{ opacity: var(--splash-opacity, 0); }
+.splash-img{ width:100%; height:auto; display:block; }
+
+
+.ship-wrap{
+  position:absolute;
+  right: var(--ship-right);
+  bottom: var(--ship-bottom);
+  width: min(34vw, 560px);
+  height: calc(min(34vw, 560px) / var(--boat-ar));   /* fallback */
+  aspect-ratio: var(--boat-ar);       /* ✅ reserves height before image load */
+  z-index: 13;
+  transform-origin: 50% 72%;
+  will-change: transform;
+  transform:
+    translate(var(--ship-x, 0), var(--ship-y, 0))
+    scale(var(--ship-scale, 1))
+    rotate(var(--ship-rot, 0deg))
+    translateZ(0);
+  clip-path: inset(0 0 var(--ship-clip, 0) 0);
+  backface-visibility: hidden;
+
+}
+
+
+/* Prefer aspect-ratio when supported */
+@supports (aspect-ratio: 1 / 1) {
+  .ship-wrap{
+    height: auto;
+    aspect-ratio: var(--boat-ar);
+  }
+}
+
+/* Locks the composition after the scroll scene ends */
+.super-hero.hero-final{
+  --stars-opacity: 0;
+  --bg-opacity: 1;
+  --sun-y: -6vh;
+  --sun-brightness: 1.15;
+
+  /* Boat final pose */
+  --ship-x: var(--ship-rest-x, -30vw);
+  --ship-y: var(--ship-rest-y, 20vh);
+  --ship-rot: var(--ship-rest-rot, 50deg);
+  --ship-scale: var(--ship-rest-scale, 2);
+  --ship-clip: var(--ship-rest-clip, 6%);
+}
+.super-hero.hero-final .ship-wrap{ z-index: 14; }
+.super-hero.hero-final .tail,
+.super-hero.hero-final .splash{ opacity:0; visibility:hidden; }
+.super-hero.is-loading { opacity: 0; }
+.super-hero.is-ready   { opacity: 1; transition: opacity .35s ease; }
+
+
