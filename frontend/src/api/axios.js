@@ -1,11 +1,12 @@
 // src/api/axios.js
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: 'http://localhost:8080/api', // backend base URL
-  withCredentials: true
-});
+const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
+const api = axios.create({
+  baseURL,                  // <-- must be your Railway HTTPS URL in prod
+  withCredentials: true,
+});
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
