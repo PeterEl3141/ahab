@@ -35,7 +35,6 @@ async function uploadBufferToS3({ buffer, key, contentType, cacheControl = 'publ
     Body: buffer,
     ContentType: contentType,
     CacheControl: cacheControl,
-    ACL: acl,
   });
   await s3.send(cmd);
   return getPublicUrl(key);
