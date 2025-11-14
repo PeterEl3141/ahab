@@ -205,3 +205,16 @@ button:hover,
   height: var(--dropdown-bridge);
   /* transparent */
 }
+
+
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 0 1rem;          /* less side padding on tiny screens */
+  }
+
+  .navbar-right ul {
+    flex-wrap: wrap;          /* allow the links to go onto 2 lines */
+    gap: 0.75rem;             /* smaller gaps so it fits more easily */
+  }
+}

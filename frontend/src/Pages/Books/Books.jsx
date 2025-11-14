@@ -49,11 +49,13 @@ const Books = () => {
           <Featured article={featured0} />
           <Featured article={featured1} reverse />
           <Triptych articles={triptychSlice} />
-          <ShakesPortal />
         </>
       )}
     </div>
   );
 };
+
+
+//remember to remount <ShakesPortal /> once changes are made 
 
 export default Books;
