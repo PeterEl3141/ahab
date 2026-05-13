@@ -1,29 +1,27 @@
-*, *::before, *::after {
+html {
+  box-sizing: border-box;
+  letter-spacing: 0.1rem;
+}
+
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
 html,
-body {
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-
-html {
-  box-sizing: border-box;
-  scroll-behavior: smooth;
-  letter-spacing: 0.1rem;
-}
-
-body {
-  font-family: 'Didact Gothic';
-  background-color: #f6f6f6;
+body,
+#root {
+  min-height: 100%;
   margin: 0;
   padding: 0;
-  color: #171717;
-  overscroll-behavior: none;
 }
 
+body {
+  font-family: 'Didact Gothic', sans-serif;
+  background-color: #f6f6f6;
+  color: #171717;
+}
 
 a {
   text-decoration: none;
@@ -44,11 +42,10 @@ button:hover {
   background-color: #CD3600;
 }
 
-li{
+li {
   list-style: none;
 }
 
-/* Enable interaction with inputs inside draggable items */
 .block-heading,
 .block-subheading,
 .block-paragraph,
@@ -64,7 +61,6 @@ li{
   background-color: white;
 }
 
-/* Optional: block-specific font sizes */
 .block-heading {
   font-size: 1.6rem;
   font-weight: bold;
@@ -81,7 +77,6 @@ li{
   color: #444;
 }
 
-/* Style for image placeholder block */
 .block-image {
   background-color: #f1f1f1;
   border: 1px dashed #aaa;
@@ -101,7 +96,6 @@ li{
   margin-bottom: 0.5rem;
   background: #f9f9f9;
 }
-
 
 .block-wrapper input:focus {
   outline: none;

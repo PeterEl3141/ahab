@@ -25,7 +25,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <NotFound />, 
+    errorElement: <NotFound />,
     children: [
       { index: true, element: <Home /> },
       { path: 'books', element: <Books /> },
@@ -33,20 +33,17 @@ const router = createBrowserRouter([
       { path: 'blog', element: <Blog /> },
       { path: 'about', element: <About /> },
       { path: 'dashboard', element: <RequrieAdmin><Dashboard /></RequrieAdmin> },
-      { path:"unpublished", element:<Unpublished />},
-      { path:"article/:id", element:<Article />},
-      { path:"articleList/:category", element:<ArticleList />},
-      { path:"forgot-password", element:<ForgotPassword />},
-      { path:"reset-password", element:<ResetPassword />},
-
+      { path: 'unpublished', element: <Unpublished /> },
+      { path: 'article/:id', element: <Article /> },
+      { path: 'articleList/:category', element: <ArticleList /> },
+      { path: 'forgot-password', element: <ForgotPassword /> },
+      { path: 'reset-password', element: <ResetPassword /> },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  </React.StrictMode>
+  <AuthProvider>
+    <RouterProvider router={router} />
+  </AuthProvider>
 );

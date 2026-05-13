@@ -3,6 +3,7 @@ import { Outlet, Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import Login from './components/Login/Login';
+import SuperHero from './components/SuperHero/SuperHero';
 
 function App() {
 
@@ -19,7 +20,9 @@ function App() {
         <Footer />
       </div>
     </>
+    
   )
 }
+
 
 export default App
